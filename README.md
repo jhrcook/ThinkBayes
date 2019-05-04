@@ -5,7 +5,7 @@ May 2, 2019
 
 ---
 
-I am following along with Allen Downey's *Think Bayes* text book. This repository is just a collection of jupyter notebooks that are my notes for the book.
+I am following along with Allen Downey's [*Think Bayes*](https://greenteapress.com/wp/think-bayes/) text book (the PDF is available for free at the link). This repository is just a collection of jupyter notebooks that are my notes for the book.
 
 ---
 
