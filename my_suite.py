@@ -82,3 +82,11 @@ class Suite(Pmf):
             like = self.Liklihood(data, hypo)
             self.Mult(hypo, like)
         self.Normalize()
+        
+    # a more efficient version of `Update()`
+    def UpdateSet(self, dataset):
+        for data in dataset:
+            for hypo in self.hypotheses.values():
+                like = self.Liklihood(data, hypo)
+                self.Mult(hypo, like)
+        return self.Normalize()
