@@ -17,23 +17,29 @@ class Pmf:
     def __init__(self):
         self.hypotheses = dict()
     
-    
-    # sets the `hypo` to the probability `prob`
+
     def Set(self, hypo, prob):
+        '''
+        sets the `hypo` to the probability `prob`
+        '''
         self.hypotheses[hypo] = prob
     
     
-    # increments the object `hypo` by `n`
-    # useful for building the PMF from an iterator
     def Incr(self, hypo, n):
+        '''
+        increments the object `hypo` by `n`
+        useful for building the PMF from an iterator
+        '''
         if obj in self.options.keys():
             self.hypotheses[hypo] += 1
         else:
             self.hypotheses[hypo] = 1
     
     
-    # nromalize the PMF back to a sum of 1
     def Normalize(self):
+        '''
+        normalize the PMF back to a sum of 1
+        '''
         possible_hypos = sum(self.hypotheses.values())
         if possible_hypos > 0:
             for hypo in self.hypotheses.keys():
@@ -42,27 +48,57 @@ class Pmf:
             print("No values set")
     
     
-    # return the probability of hypothesis `hypo`
     def Prob(self, hypo):
+        '''
+        return the probability of hypothesis `hypo`
+        '''
         if obj in self.hypotheses.keys():
             print(self.hypotheses[hypo])
         else:
             print(hypo + "has not been set, yet")
     
     
-    # multiply the current prob of object `hypo` by `new_p`
     def Mult(self, hypo, new_p):
+        '''
+        multiply the current prob of object `hypo` by `new_p`
+        '''
         if hypo in self.hypotheses.keys():
             self.hypotheses[hypo] *= new_p
     
     
-    # print statement
     def __str__(self):
         msg = ""
         for hypo in self.hypotheses.keys():
             msg = msg + str(hypo) + ': ' + str(self.hypotheses[hypo]) + '\n'
         return(msg)
 
+    
+    def MaximumLiklihood(self):
+        '''
+        Calculates the maximum liklihood of the posterior prob of a Suite object
+        '''
+        prob, val = max((prob, val) for val, prob in self.hypotheses.items())
+        return val
+    
+    
+    def Mean(pmf):
+        '''
+        Calculates the mean of the posterior prob of a Suite object
+        '''
+        avg = sum(prob * val for val, prob in pmf.hypotheses.items())
+        return avg
+
+
+    def Percentile(pmf, percentage):
+        '''
+        Calculates the percentile of the posterior distribution
+        '''
+        p = percentage / 100.0
+        total = 0
+        for val, prob in pmf.hypotheses.items():
+            total += prob
+            if total >= p:
+                return val
 
 
 class Suite(Pmf):
@@ -75,16 +111,21 @@ class Suite(Pmf):
             self.Set(hypo, 1)
         self.Normalize()
     
-    
-    # update the hypotheses using new data
+
     def Update(self, data):
+        '''
+        update the hypotheses using new data
+        '''
         for hypo in self.hypotheses.keys():
             like = self.Liklihood(data, hypo)
             self.Mult(hypo, like)
         self.Normalize()
         
-    # a more efficient version of `Update()`
+    
     def UpdateSet(self, dataset):
+        '''
+        a more efficient version of `Update()`
+        '''
         for data in dataset:
             for hypo in self.hypotheses.values():
                 like = self.Liklihood(data, hypo)
