@@ -10,6 +10,8 @@ I am not frequent Python programmer, so I apologize for
 inconsistencies and straying from PEP8 and common style customs
 '''
 
+from numpy.random import choice
+
 class Pmf:
     '''
     A class to define and maitain a probability mass function
@@ -81,24 +83,32 @@ class Pmf:
         return val
     
     
-    def Mean(pmf):
+    def Mean(self):
         '''
         Calculates the mean of the posterior prob of a Suite object
         '''
-        avg = sum(prob * val for val, prob in pmf.hypotheses.items())
+        avg = sum(prob * val for val, prob in self.hypotheses.items())
         return avg
 
 
-    def Percentile(pmf, percentage):
+    def Percentile(self, percentage):
         '''
         Calculates the percentile of the posterior distribution
         '''
         p = percentage / 100.0
         total = 0
-        for val, prob in pmf.hypotheses.items():
+        for val, prob in self.hypotheses.items():
             total += prob
             if total >= p:
                 return val
+    
+    def Random(self, n=1):
+        '''
+        Returns a random hypothesis from the hypotheses
+        weighed by the probability of the hypothesis
+        '''
+        return choice(list(self.hypotheses.keys()), p=list(self.hypotheses.values()))
+    
 
 
 class Suite(Pmf):
