@@ -27,15 +27,15 @@ class Pmf:
         self.hypotheses[hypo] = prob
     
     
-    def Incr(self, hypo, n):
+    def Incr(self, hypo, n=1):
         '''
         increments the object `hypo` by `n`
         useful for building the PMF from an iterator
         '''
-        if obj in self.options.keys():
-            self.hypotheses[hypo] += 1
+        if hypo in self.hypotheses.keys():
+            self.hypotheses[hypo] += n
         else:
-            self.hypotheses[hypo] = 1
+            self.hypotheses[hypo] = n
     
     
     def Normalize(self):
@@ -108,6 +108,18 @@ class Pmf:
         weighed by the probability of the hypothesis
         '''
         return choice(list(self.hypotheses.keys()), p=list(self.hypotheses.values()))
+    
+    
+    def __add__(self, other):
+        '''
+        Sum two Pmf objects
+        Enumerate all possibilities, add calculate the sum and probability of each
+        '''
+        pmf = Pmf()
+        for v1, p1 in self.hypotheses.items():
+            for v2, p2 in other.hypotheses.items():
+                pmf.Incr(v1+v2, p1*p2)
+        return pmf
     
 
 
