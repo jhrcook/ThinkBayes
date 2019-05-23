@@ -64,6 +64,20 @@ def MakeCdfFromPmf(pmf):
     return MakeCdfFromItems(pmf.Items())
 
 
+def MakeMixture(pmf_dice):
+    ''' Calculates the PMF for a mixture of dice
+    Args:
+        pmf_dice: a pmf filled with Die() pmfs
+    Returns:
+        a Pmf object
+    '''
+    mix = Pmf()
+    for die, weight in pmf_dice.Items():
+        for outcome, prob in die.Items():
+            mix.Incr(outcome, weight * prob)
+    return mix
+
+
 '''
 New classes
 '''
